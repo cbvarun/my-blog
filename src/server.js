@@ -3,21 +3,14 @@ import bodyParser from 'body-parser';
 import {MongoClient} from 'mongodb';
 import path from 'path';
 
-var cors = require('cors');
-
 const app = express();
 
 app.use(express.static(path.join(__dirname, '/build')))
-
-app.use(cors());
 
 app.use(bodyParser.json());
 
 const withDB = async (operations, res) => {
     try {
-        res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true, useUnifiedTopology: true});
         const db = client.db('my-blog');
 
@@ -75,7 +68,7 @@ app.post('/api/articles/:name/comment', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/build/index.html'));
+    res.sendFile(path.join(__dirname + '/build/index.html'));
 })
 
 app.listen(8000, () => console.log('listening on port 8000'));
