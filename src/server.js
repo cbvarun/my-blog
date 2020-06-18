@@ -2,12 +2,34 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import {MongoClient} from 'mongodb';
 import path from 'path';
+import nodemailer from 'nodemailer';
+import cors from 'cors';
+import emailConfig from './emailconfig';
 
 const app = express();
-
 app.use(express.static(path.join(__dirname, '/build')))
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+
+var transport = {
+    service: 'Gmail', // Don’t forget to replace with the SMTP host of your provider
+    auth: {
+        user: emailConfig.USER,
+        pass: emailConfig.PASS
+    }
+}
+
+var transporter = nodemailer.createTransport(transport);
+
+transporter.verify((error, success) => {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Server is ready to take messages');
+    }
+});
 
 const withDB = async (operations, res) => {
     try {
@@ -48,6 +70,45 @@ app.post('/api/articles/:name/upvote', async (req, res) => {
     }, res)    
 });
 
+
+app.post('/api/enquiry', async (req, res) => {
+    console.log('reached enquiry form');
+    const {name, email, message} = req.body;
+
+    var content = `name: ${name} \n email: ${email} \n message: ${message} `;
+
+    var mail = {
+        from: name + ' - ' + email,
+        to: 'cbvarun@yahoo.com',  // Change to email address that you want to receive messages on
+        subject: 'New Message from Behon3st',
+        text: content
+    };
+
+    transporter.sendMail(mail, (err, data) => {
+        if (err) {
+            res.json({
+                status: 'fail'
+            })
+        } else {
+            res.json({
+                status: 'success'
+            });
+            transporter.sendMail({
+                from: "cbvarun@yahoo.com",
+                to: email,
+                subject: "Submission was successful",
+                text: `Thank you for contacting us!\n\nForm details\nName: ${name}\nEmail: ${email}\nMessage: ${message}`
+            }, function (error, info) {
+                if(error) {
+                  console.log(error);
+                } else{
+                  console.log('Message sent: ' + info.response);
+                }
+            });            
+        }
+        transporter.close();
+    });
+});
 
 app.post('/api/articles/:name/comment', async (req, res) => {
     withDB(async (db) => {
