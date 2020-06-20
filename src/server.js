@@ -5,8 +5,10 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
 import emailConfig from './emailconfig';
+var compression = require('compression');
 
 const app = express();
+app.use(compression());
 app.use(express.static(path.join(__dirname, '/build')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
