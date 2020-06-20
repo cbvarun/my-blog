@@ -9,11 +9,38 @@ var compression = require('compression');
 
 const app = express();
 app.use(compression());
-app.use(express.static(path.join(__dirname, '/build')))
+app.use(express.static(path.join(__dirname, '/build'), {
+    extensions: ["html"],
+    setHeaders(res, path) {
+        console.log(path);
+        if (path.match(/(\.html|\/sw\.js)$/)) {
+            setNoCache(res);
+            return;
+        }
+
+        if (path.match(/\.(js|css|png|PNG|jpg|jpeg|gif|ico|json)$/)) {
+            setLongTermCache(res);
+        }
+    },
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+function setNoCache (res) {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 1);
+    res.setHeader("Expires", date.toUTCString());
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Cache-Control", "public, no-cache");
+  }
+  
+  function setLongTermCache (res) {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1);
+    res.setHeader("Expires", date.toUTCString());
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+  }
 
 var transport = {
     service: 'Gmail', // Don’t forget to replace with the SMTP host of your provider
@@ -131,6 +158,7 @@ app.post('/api/articles/:name/comment', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
+    setNoCache(res);
     res.sendFile(path.join(__dirname + '/build/index.html'));
 })
 
