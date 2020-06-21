@@ -8,18 +8,18 @@ import emailConfig from './emailconfig';
 
 const compression = require('compression');
 const http = require('http');
-const https = require('https');
-const fs = require('fs');
+//const https = require('https');
+//const fs = require('fs');
 
-const credentials = {
+/* const credentials = {
     key: fs.readFileSync(__dirname + '/key.pem'),
     cert: fs.readFileSync(__dirname + '/cert.pem')
-};
+}; */
 
 const app = express();
 
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+//var httpsServer = https.createServer(credentials, app);
 
 app.use(compression());
 app.use(express.static(path.join(__dirname, '/build'), {
@@ -173,15 +173,15 @@ app.post('/api/articles/:name/comment', async (req, res) => {
 });
 
 app.use('*', (req, res, next) => {
-    console.log("redirecting" + req.hostname + ' ' + req.url);
-    if (req.secure) {
+    //console.log("redirecting" + req.hostname + ' ' + req.url);
+    if (!req.secure) {
         setNoCache(res);
         res.sendFile(path.join(__dirname + '/build/index.html'));
         return next();
     }
-    res.redirect(`https://${req.hostname}:443${req.url}`);
+    //res.redirect(`https://${req.hostname}:443${req.url}`);
 });
 
 httpServer.listen(8000, () => console.log('listening on port 8000'));
-httpsServer.listen(443, () => console.log('listening on port 443'));
+//httpsServer.listen(443, () => console.log('listening on port 443'));
 
