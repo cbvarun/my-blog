@@ -179,9 +179,9 @@ app.use('*', (req, res, next) => {
         res.sendFile(path.join(__dirname + '/build/index.html'));
         return next();
     }
-    res.redirect(`https://${req.hostname}:8443${req.url}`);
+    res.redirect(`https://${req.hostname}:443${req.url}`);
 });
 
 httpServer.listen(8000, () => console.log('listening on port 8000'));
-httpsServer.listen(8443, () => console.log('listening on port 8443'));
+httpsServer.listen(443, () => console.log('listening on port 443'));
 
