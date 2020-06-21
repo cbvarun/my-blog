@@ -5,14 +5,26 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
 import emailConfig from './emailconfig';
-var compression = require('compression');
+
+const compression = require('compression');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+
+const credentials = {
+    key: fs.readFileSync(__dirname + '/key.pem'),
+    cert: fs.readFileSync(__dirname + '/cert.pem')
+};
 
 const app = express();
+
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
 app.use(compression());
 app.use(express.static(path.join(__dirname, '/build'), {
     extensions: ["html"],
     setHeaders(res, path) {
-        console.log(path);
         if (path.match(/(\.html|\/sw\.js)$/)) {
             setNoCache(res);
             return;
@@ -26,6 +38,9 @@ app.use(express.static(path.join(__dirname, '/build'), {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
+app.enable('trust proxy');
+
 
 function setNoCache (res) {
     const date = new Date();
@@ -157,10 +172,16 @@ app.post('/api/articles/:name/comment', async (req, res) => {
     }, res)
 });
 
-app.get('*', (req, res) => {
-    setNoCache(res);
-    res.sendFile(path.join(__dirname + '/build/index.html'));
-})
+app.use('*', (req, res, next) => {
+    console.log("redirecting" + req.hostname + ' ' + req.url);
+    if (req.secure) {
+        setNoCache(res);
+        res.sendFile(path.join(__dirname + '/build/index.html'));
+        return next();
+    }
+    res.redirect(`https://${req.hostname}:8443${req.url}`);
+});
 
-app.listen(8000, () => console.log('listening on port 8000'));
+httpServer.listen(8000, () => console.log('listening on port 8000'));
+httpsServer.listen(8443, () => console.log('listening on port 8443'));
 
