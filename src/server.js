@@ -173,11 +173,12 @@ app.post('/api/articles/:name/comment', async (req, res) => {
 });
 
 app.use('*', (req, res, next) => {
-    //console.log("redirecting" + req.hostname + ' ' + req.url);
+    console.log("redirecting" + req.hostname + ' ' + req.url);
+    console.log('secure? : ' + req.secure);
     if (!req.secure) {
         setNoCache(res);
         res.sendFile(path.join(__dirname + '/build/index.html'));
-        return next();
+        //return next(); //  this will break see https://ui.dev/react-router-cannot-get-url-refresh/#:~:text=The%20reason%20for%20the%20dreaded,is%20supposed%20to%20do%20it).
     }
     //res.redirect(`https://${req.hostname}:443${req.url}`);
 });
