@@ -25,6 +25,7 @@ app.use(compression());
 app.use(express.static(path.join(__dirname, '/build'), {
     extensions: ["html"],
     setHeaders(res, path) {
+        console.log('reached set headers');
         if (path.match(/(\.html|\/sw\.js)$/)) {
             setNoCache(res);
             return;
