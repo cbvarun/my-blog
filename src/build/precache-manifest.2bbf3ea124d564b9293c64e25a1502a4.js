@@ -1,35 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "58d963e06fcf38e353ddae7ca5de264e",
+    "revision": "01f7d7c0061e50de1805dca353313486",
     "url": "/index.html"
   },
   {
-    "revision": "a1850bd8361371a2bc57",
+    "revision": "a10dd6a933b6adb0d7fd",
     "url": "/static/css/2.829c9cb5.chunk.css"
   },
   {
-    "revision": "de79ba6db858188f027d",
-    "url": "/static/css/main.bb01f0e3.chunk.css"
+    "revision": "4a0a6d5a8bf5551621aa",
+    "url": "/static/css/main.607d7b3f.chunk.css"
   },
   {
-    "revision": "a1850bd8361371a2bc57",
-    "url": "/static/js/2.d56f4f77.chunk.js"
+    "revision": "a10dd6a933b6adb0d7fd",
+    "url": "/static/js/2.a2a191f3.chunk.js"
   },
   {
     "revision": "5e9b6f5c16b720e8a86875f97734673e",
-    "url": "/static/js/2.d56f4f77.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.a2a191f3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "de79ba6db858188f027d",
-    "url": "/static/js/main.a008550b.chunk.js"
+    "revision": "4a0a6d5a8bf5551621aa",
+    "url": "/static/js/main.e83c6094.chunk.js"
   },
   {
     "revision": "36adbc7179ce49d2ac8a",
     "url": "/static/js/runtime-main.79e3e27f.js"
-  },
-  {
-    "revision": "c82d014c912c48d822e5906823373b01",
-    "url": "/static/media/CompanyLogo.c82d014c.png"
   },
   {
     "revision": "e740a0ffe7fd68a1abc32f138e3a238c",
@@ -44,10 +40,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/card-contact.52e0ea0f.png"
   },
   {
-    "revision": "da3147f97c94d4ab19855178305efcec",
-    "url": "/static/media/cart.da3147f9.jpg"
-  },
-  {
     "revision": "886ccc087d4bdb2f431c1d2ae43f11fa",
     "url": "/static/media/contactus.886ccc08.jpg"
   },
@@ -56,8 +48,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/flower.d9a55617.jpg"
   },
   {
-    "revision": "803680b7e983eae218ac283682a81559",
-    "url": "/static/media/honey-art.803680b7.jpg"
+    "revision": "9e053b26a84292a578cb0b2bb155a5fd",
+    "url": "/static/media/honey-art.9e053b26.jpg"
   },
   {
     "revision": "aa87f60054426051af4bc53d890696f2",
