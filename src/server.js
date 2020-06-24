@@ -5,6 +5,7 @@ import path from 'path';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
 import emailConfig from './emailconfig';
+import Razorpay from 'razorpay';
 
 const compression = require('compression');
 const http = require('http');
@@ -154,6 +155,39 @@ app.post('/api/enquiry', async (req, res) => {
         transporter.close();
     });
 });
+
+
+app.post('/api/pay', async (req, res) => {
+    console.log('reached payment');
+    const {unitprice, quantity, receiptId} = req.body;
+    const instance = new Razorpay({
+        key_id: 'rzp_test_H3pXxqu1efAaPC',
+        key_secret: 'LLHh7YPX6j46J9Igwb1BRcXh'
+    });
+    var options = {
+        amount: unitprice * quantity,  // amount in the smallest currency unit
+        currency: "INR",
+        receipt: receiptId,
+        payment_capture: '0'
+    };
+    try {
+        instance.orders.create(options, async function (err, order) {
+            if (err) {
+                return res.status(500).json({
+                    status: 'error',
+                    message: "Something Went Wrong",
+                });
+            }
+            console.log(order);
+            return res.status(200).json(order);
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "Something Went Wrong",
+        });
+    }    
+});
+
 
 app.post('/api/articles/:name/comment', async (req, res) => {
     withDB(async (db) => {
