@@ -17,7 +17,7 @@
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.4",
     "mongodb": "^3.5.8",
-    "nodemailer": "^6.4.10",
+    "nodemailer": "^6.4.16",
     "razorpay": "^2.0.6"
   },
   "devDependencies": {
